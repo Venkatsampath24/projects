@@ -2,8 +2,8 @@ import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Pagination from "./Pagination";
-// import WatchList from "./WatchList";
-// import WatchList from "./WatchList";
+
+
 
 function Movies(props) {
   const [movies, setMovies] = useState([]);

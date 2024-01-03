@@ -45,16 +45,25 @@ function WatchList() {
     let temp = favourites.map((movie) => genreids[movie.genre_ids[0]]);
     temp = new Set(temp); // imp
     setGenres(["All Genres", ...temp]);
-  });
+  },[]);
 
   let filteredArray = [];
 
   // genre Filter features.
 
+  // filteredArray =
+  //   currGenre === "All Genres"
+  //     ? favourites
+  //     : favourites.filter((movie) => genreids[movie.genre_ids[0]] === currGenre);
+
   filteredArray =
     currGenre === "All Genres"
       ? favourites
-      : favourites.filter((movie) => genreids[movie.genre_ids[0]] === currGenre);
+      : favourites.filter((movie) => {
+          const genreId = movie.genre_ids && movie.genre_ids[0];
+          return genreids[genreId] === currGenre;
+      });
+
 
   // Sorting with Respect to ratings
   
@@ -88,7 +97,7 @@ function WatchList() {
       <div className="mt-6 flex space-x-2 justify-center">
         {genres.map((genre) => {
           return (
-            <button
+            <button key={genre}
               className={
                 currGenre === genre
                   ? "m-2 text-lg p-1 px-2 bg-blue-400 text-white rounded-xl font-bold"
@@ -116,11 +125,11 @@ function WatchList() {
       </div>
 
       {/*Table of WatchList */}
-      <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
-        <table class='w-full border-collapse bg-white text-left text-sm text-gray-500"'>
-          <thead class="bg-gray-50">
+      <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+        <table className='w-full border-collapse bg-white text-left text-sm text-gray-500"'>
+          <thead className="bg-gray-50">
             <tr>
-              <th class="px-6 py-4 font-medium text-gray-900">Name</th>
+              <th className="px-6 py-4 font-medium text-gray-900">Name</th>
 
               <th>
                 <div className="flex">
@@ -130,7 +139,7 @@ function WatchList() {
                     onClick={() => {
                       setRating(1);
                     }}
-                  alt=""/>
+                  alt="sort-ascend"/>
                   <div>Ratings</div>
                   <img
                     src="https://img.icons8.com/external-those-icons-lineal-those-icons/24/000000/external-down-arrows-those-icons-lineal-those-icons-4.png"
@@ -138,7 +147,7 @@ function WatchList() {
                     onClick={() => {
                       setRating(-1);
                     }}
-                  alt=""/>
+                  alt="sort-decend"/>
                 </div>
               </th>
 
@@ -156,17 +165,17 @@ function WatchList() {
             </tr>
           </thead>
 
-          <tbody class="divide-y divide-gray-100 border-t border-gray-100">
+          <tbody className="divide-y divide-gray-100 border-t border-gray-100">
             {filteredArray.map((movie) => {
               return (
-                <tr class="hover:bg-gray-50">
-                  <td class="flex items-center px-6 py-4 font-normal text-gray-900 space-x-2">
+                <tr key={movie.id} className="hover:bg-gray-50">
+                  <td className="flex items-center px-6 py-4 font-normal text-gray-900 space-x-2">
                     <img
-                      class="h-[6rem]  w-[10rem] object-fit"
+                      className="h-[6rem]  w-[10rem] object-fit"
                       src={`https://image.tmdb.org/t/p/original/t/p/original/${movie.poster_path}`}
                     alt=""/>
 
-                    <div class="font-medium text-gray-700  text-sm">
+                    <div className="font-medium text-gray-700  text-sm">
                       {movie.title}
                     </div>
                   </td>
