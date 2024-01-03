@@ -29,6 +29,8 @@ function WatchList() {
     37: "Western",
   };
 
+  // Local Storage Setup to Store favorite Movies
+
   useEffect(() => {
     let moviesFromLocalStorage = localStorage.getItem("imdb");
 
@@ -36,6 +38,8 @@ function WatchList() {
 
     setFavourites(moviesFromLocalStorage);
   }, []);
+
+  // Set Unique movie genre in favorite watchList.
 
   useEffect(() => {
     let temp = favourites.map((movie) => genreids[movie.genre_ids[0]]);
@@ -45,7 +49,7 @@ function WatchList() {
 
   let filteredArray = [];
 
-  // genre Filter
+  // genre Filter features.
 
   filteredArray =
     currGenre === "All Genres"
@@ -53,6 +57,7 @@ function WatchList() {
       : favourites.filter((movie) => genreids[movie.genre_ids[0]] === currGenre);
 
   // Sorting with Respect to ratings
+  
   if (rating === -1) {
     filteredArray = filteredArray.sort(function (objA, objB) {
       return objB.vote_average - objA.vote_average;
@@ -79,6 +84,7 @@ function WatchList() {
 
   return (
     <>
+
       <div className="mt-6 flex space-x-2 justify-center">
         {genres.map((genre) => {
           return (
@@ -98,6 +104,7 @@ function WatchList() {
         })}
       </div>
 
+      {/*Search input*/}
       <div className="text-center">
         <input
           type="text"
@@ -108,6 +115,7 @@ function WatchList() {
         />
       </div>
 
+      {/*Table of WatchList */}
       <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
         <table class='w-full border-collapse bg-white text-left text-sm text-gray-500"'>
           <thead class="bg-gray-50">
@@ -177,6 +185,7 @@ function WatchList() {
                 </tr>
               );
             })}
+
           </tbody>
         </table>
       </div>
