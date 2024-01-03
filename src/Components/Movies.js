@@ -49,9 +49,6 @@ function Movies(props) {
 };
 
 
-
- 
-
   const showButton = (id) => {
     setHovered(id);
   };
@@ -66,9 +63,6 @@ function Movies(props) {
   }, [watchList]);
   
   
-
-
-
   useEffect(() => {
 
     // IIFE function for immediate invoked functions expression.

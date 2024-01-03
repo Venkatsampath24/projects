@@ -51,18 +51,18 @@ function WatchList() {
 
   // genre Filter features.
 
-  // filteredArray =
-  //   currGenre === "All Genres"
-  //     ? favourites
-  //     : favourites.filter((movie) => genreids[movie.genre_ids[0]] === currGenre);
-
   filteredArray =
     currGenre === "All Genres"
       ? favourites
-      : favourites.filter((movie) => {
-          const genreId = movie.genre_ids && movie.genre_ids[0];
-          return genreids[genreId] === currGenre;
-      });
+      : favourites.filter((movie) => genreids[movie.genre_ids[0]] === currGenre);
+
+  // filteredArray =
+  //   currGenre === "All Genres"
+  //     ? favourites
+  //     : favourites.filter((movie) => {
+  //         const genreId = movie.genre_ids && movie.genre_ids[0];
+  //         return genreids[genreId] === currGenre;
+  //     });
 
 
   // Sorting with Respect to ratings
