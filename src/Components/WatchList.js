@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 function WatchList() {
   const [favourites, setFavourites] = useState([]);
@@ -7,7 +7,8 @@ function WatchList() {
   const [rating, setRating] = useState(0);
   const [searchStr, setSearchStr] = useState("");
 
-  let genreids = {
+  let genreids = useMemo(()=> ({
+
     28: "Action",
     12: "Adventure",
     16: "Animation",
@@ -27,46 +28,35 @@ function WatchList() {
     53: "Thriller",
     10752: "War",
     37: "Western",
-  };
-
-  // Local Storage Setup to Store favorite Movies
+  }),[]) 
+    
+  
 
   useEffect(() => {
     let moviesFromLocalStorage = localStorage.getItem("imdb");
 
     moviesFromLocalStorage = JSON.parse(moviesFromLocalStorage);
 
-    setFavourites(moviesFromLocalStorage);
+    setFavourites(prevFavourites => moviesFromLocalStorage || prevFavourites);
   }, []);
-
-  // Set Unique movie genre in favorite watchList.
 
   useEffect(() => {
     let temp = favourites.map((movie) => genreids[movie.genre_ids[0]]);
     temp = new Set(temp); // imp
     setGenres(["All Genres", ...temp]);
-  },[]);
+  },[favourites , genreids]);
 
   let filteredArray = [];
 
-  // genre Filter features.
+  // genre Filter
 
-  filteredArray =
-    currGenre === "All Genres"
-      ? favourites
-      : favourites.filter((movie) => genreids[movie.genre_ids[0]] === currGenre);
-
-  // filteredArray =
-  //   currGenre === "All Genres"
-  //     ? favourites
-  //     : favourites.filter((movie) => {
-  //         const genreId = movie.genre_ids && movie.genre_ids[0];
-  //         return genreids[genreId] === currGenre;
-  //     });
-
+  filteredArray = favourites.filter((movie) => {
+    const genreId = movie.genre_ids?.[0];
+    return currGenre === "All Genres" || genreids[genreId] === currGenre;
+  });
+  
 
   // Sorting with Respect to ratings
-  
   if (rating === -1) {
     filteredArray = filteredArray.sort(function (objA, objB) {
       return objB.vote_average - objA.vote_average;
@@ -79,9 +69,9 @@ function WatchList() {
     });
   }
 
-  filteredArray = filteredArray.filter((movie) => {
-    return movie.title.toLowerCase().includes(searchStr.toLowerCase());
-  });
+   filteredArray = filteredArray.filter((movie)=>{
+     return movie.title.toLowerCase().includes(searchStr.toLowerCase())
+   })
 
   // Sorting with respect to popularity
 
@@ -93,8 +83,7 @@ function WatchList() {
 
   return (
     <>
-
-      <div className="mt-6 flex space-x-2 justify-center">
+      <div className ="mt-6 flex space-x-2 justify-center">
         {genres.map((genre) => {
           return (
             <button key={genre}
@@ -113,18 +102,16 @@ function WatchList() {
         })}
       </div>
 
-      {/*Search input*/}
       <div className="text-center">
         <input
           type="text"
           className="border bg-gray-200 border-4 text-center p-1 m-2"
           placeholder="Search for Movies"
-          value={searchStr}
-          onChange={(e) => setSearchStr(e.target.value)}
+           value={searchStr}
+          onChange={(e)=> setSearchStr(e.target.value)}
         />
       </div>
 
-      {/*Table of WatchList */}
       <div className="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
         <table className='w-full border-collapse bg-white text-left text-sm text-gray-500"'>
           <thead className="bg-gray-50">
@@ -139,7 +126,7 @@ function WatchList() {
                     onClick={() => {
                       setRating(1);
                     }}
-                  alt="sort-ascend"/>
+                  alt="asce-logo"/>
                   <div>Ratings</div>
                   <img
                     src="https://img.icons8.com/external-those-icons-lineal-those-icons/24/000000/external-down-arrows-those-icons-lineal-those-icons-4.png"
@@ -147,7 +134,7 @@ function WatchList() {
                     onClick={() => {
                       setRating(-1);
                     }}
-                  alt="sort-decend"/>
+                  alt="decend-logo"/>
                 </div>
               </th>
 
@@ -168,12 +155,12 @@ function WatchList() {
           <tbody className="divide-y divide-gray-100 border-t border-gray-100">
             {filteredArray.map((movie) => {
               return (
-                <tr key={movie.id} className="hover:bg-gray-50">
+                <tr className="hover:bg-gray-50">
                   <td className="flex items-center px-6 py-4 font-normal text-gray-900 space-x-2">
                     <img
                       className="h-[6rem]  w-[10rem] object-fit"
                       src={`https://image.tmdb.org/t/p/original/t/p/original/${movie.poster_path}`}
-                    alt=""/>
+                    alt="movie-post"/>
 
                     <div className="font-medium text-gray-700  text-sm">
                       {movie.title}
@@ -194,7 +181,6 @@ function WatchList() {
                 </tr>
               );
             })}
-
           </tbody>
         </table>
       </div>
